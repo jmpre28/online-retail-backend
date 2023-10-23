@@ -6,21 +6,21 @@ const { Category, Product } = require('../../models');
 // Finds all categories
 router.get('/', async (req, res) => {
   try {
-    const categories = await Category.findAll({
+    const allCategories = await Category.findAll({
       include: [{ model: Product }]
     });
-    res.status(200).json(categories);
+    res.status(200).json(allCategories);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 
-// Finds a single category
+// Finds a single category by ID
 router.get('/:id', async (req, res) => {
   try {
     const category = await Category.findByPk(req.params.id, {
-      include: [{ model: Product}]
+      include: [{ model: Product }]
     });
     if (!category) {
       res.status(404).json({ message: 'Category does not exist.'})
@@ -49,9 +49,7 @@ router.put('/:id', (req, res) => {
       category_name: req.body.category_name
     },
     {
-      where: {
-        id: req.params.id,
-      },
+      where: { id: req.params.id }
     }
   )
     .then((updatedCategory) => {
